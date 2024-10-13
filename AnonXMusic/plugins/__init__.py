@@ -1,6 +1,6 @@
 import glob
 from os.path import dirname, isfile
-
+import importlib
 
 def __list_all_modules():
     work_dir = dirname(__file__)
@@ -14,6 +14,14 @@ def __list_all_modules():
 
     return all_modules
 
-
+# Load all modules
 ALL_MODULES = sorted(__list_all_modules())
-__all__ = ALL_MODULES + ["ALL_MODULES"]
+
+# Import the web server explicitly
+try:
+    web_server_module = importlib.import_module("AnonXMusic.plugins.web_server")
+    __all__ = ALL_MODULES + ["ALL_MODULES", "web_server_module"]
+except ModuleNotFoundError:
+    print("web_server.py not found in the plugins directory.")
+
+__all__ = ALL_MODULES + ["ALL_MODULES"]  # Keep the original __all__ for dynamic imports
